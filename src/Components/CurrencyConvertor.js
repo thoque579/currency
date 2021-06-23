@@ -3,30 +3,20 @@ import React from 'react'
 class CurrencyRow extends React.Component {
     constructor(props) {
         super(props)
-
-        
-        
     }
-
-
     render () {
-
         return(
-
-        <div className = "container input-values">
-            <div className = "row">
-                <select  value = {this.props.base} onChange ={this.props.onChangeCurrency}>
-                    {this.props.rates.map(item => {
-                        return <option key = {item}>{item}</option>
-                    })}
-                </select>
-                <input  className = "input-value"  value = {this.props.amount} onChange = {this.props.onChangeAmount}></input>
-            </div>
-        </div>
-            
+            <div className = "container input-values">
+                <div className = "row">
+                    <select value = {this.props.defaultSelectValue} onChange = {this.props.changeSelection} disabled = {this.props.loading} className = "custom-select-sm">
+                        {this.props.selectValues.map(item => {
+                            return <option key = {item} value = {item}>{item}</option>
+                        })}
+                    </select>
+                    <input value = {this.props.amount} onChange = {this.props.changeAmount}></input>
+                </div>
+            </div>      
         )
-    
-
     }
 }
 
@@ -35,84 +25,97 @@ class CurrencyConverter extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
-            currencyList: [],
-            currencyRates: {rates: {}},
-            amount: "",
-            fromCurrencySelected: "",
-            toCurrencySelected: "",
-            amountInput: true
+            rate: 1.331,
+            fromCurrency: "USD",
+            toCurrency: "AUD",
+            currencies: [],
+            baseAmount: 1,
+            quoteAmount: 1 * 1.331,
+            input: true,
+            loading: true
         }
+        
+        this.changeBaseSelection = this.changeBaseSelection.bind(this)
+        this.changeQuoteSelection = this.changeQuoteSelection.bind(this)
+        this.changeBaseValue = this.changeBaseValue.bind(this)
+        this.changeQuoteValue = this.changeQuoteValue.bind(this)
     }
 
-    
-
     componentDidMount() {
-        const base_url = "https://altexchangerateapi.herokuapp.com/latest"
+        this.getRates(this.state.fromCurrency, this.state.toCurrency)
+        const base_url = `https://altexchangerateapi.herokuapp.com/latest?`
         fetch(base_url)
         .then(res => res.json())
         .then(data => {
-            const firstCurrency = Object.keys(data.rates)[0]
-            this.setState({currencyRates: data.rates, amount: data.amount, currencyList: [data.base, ...Object.keys(data.rates)], fromCurrencySelected: data.base, toCurrencySelected: firstCurrency})
-            
+            this.setState({currencies: Object.keys(data.rates)})
         })
-
-       
     } 
+
+    getRates = (base, quote) => {
+        fetch(`https://altexchangerateapi.herokuapp.com/latest?from=${base}&to=${quote}`)
+        .then(res => res.json())
+        .then(data => {
+            const rate = data.rates[quote];
+            this.setState({
+                rate,
+                baseAmount: 1,
+                quoteAmount: Number((1*rate).toFixed(3)),
+                loading: false
+            })
+        })
+    }
     
-  
-    render() {
-
-        const {
-            currencyList,
-            currencyRates,
-            fromCurrencySelected,
-            toCurrencySelected,
-            amount,
-            amountInput
-        } = this.state
-
-        // currencyRates[fromCurrencySelected];
-        // currencyRates[toCurrencySelected];
-
-        console.log(currencyRates[fromCurrencySelected]);
-
-        let toRateValue =  currencyRates[toCurrencySelected];
-
+    changeBaseValue = (event) => {
         
+        this.setState({
+            baseAmount: event.target.value,
+            input: true
+        })
+    }
 
+    changeBaseSelection = (event) => {
+        const fromCurrency = event.target.value
+        this.setState({ fromCurrency })
+        this.getRates(fromCurrency, this.state.toCurrency)
+    }
 
-        let fromExchangeValue = currencyRates[fromCurrencySelected];
-        let fromAmount;
-        let toAmount;
+    changeQuoteSelection = (event) => {
+        const toCurrency = event.target.value
+         this.setState({ toCurrency })
+         this.getRates(this.state.fromCurrency, toCurrency)
+    } 
 
-        if (amountInput) {
-            fromAmount = amount
-            toAmount = fromAmount * toRateValue;
-        } else {
-            toAmount = amount
-            fromAmount = toAmount / fromExchangeValue
-        }
-
-
-
+    changeQuoteValue = (event) => {
+        this.setState({
+            quoteAmount: event.target.value,
+            input: false
+        })
+    }
+    render() {
+        const {currencies, fromCurrency, toCurrency, baseAmount, quoteAmount,input, rate, loading} = this.state
+       
+       let toAmount;
+       let fromAmount;
+       
+       if (input) {
+           fromAmount = baseAmount
+           toAmount = fromAmount * rate
+       } else {
+           toAmount = quoteAmount
+           fromAmount =  toAmount * 1 / rate
+       }
       return (
           <div className = "container">
               <div className = "text-center p-3 mb-2">
                   <h2 className = "mb-2 main-currency-header">Currency Converter</h2>
-                  <CurrencyRow  onChangeAmount = {e => {this.setState({amount: e.target.value,amountInput: true})}} rates = {currencyList} amount = {fromAmount} base = {fromCurrencySelected} onChangeCurrency = {e => {
-                      return this.setState({fromCurrencySelected: e.target.value})
-                  }}/>
+                  <CurrencyRow selectValues = {currencies} defaultSelectValue = {fromCurrency} changeSelection = {this.changeBaseSelection} amount = {fromAmount} changeAmount = {this.changeBaseValue} loading = {loading} />
                   <h2>=</h2>
-                  <CurrencyRow onChangeAmount = {e => {this.setState({amount: e.target.value,amountInput: false})}} rates = {currencyList}  amount = {toAmount} base = {toCurrencySelected} onChangeCurrency = {e => {
-                      return this.setState({toCurrencySelected: e.target.value})
-                  }}/>
+                  <CurrencyRow selectValues = {currencies} defaultSelectValue = {toCurrency} changeSelection = {this.changeQuoteSelection} amount = {toAmount} changeAmount = {this.changeQuoteValue} loading = {loading}/>
               </div>
-          </div>
+          </div>    
         )
-      }
-    
+     }
 }
 
 

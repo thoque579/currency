@@ -27,16 +27,18 @@
 
 .social-links {
   display: flex;
-  margin-right: 30px;
+  justify-content: center;
 }
 
-.container {
+.input-values {
   display: flex;
   justify-content: center;
 }
 
-#footer-container {
+.copyright-section {
   display: flex;
+  justify-content: center;
+  text-align: center;
 }
 
 .navbar-brand {
@@ -48,4 +50,22 @@
 .nav-item {
   font-style: italic;
   font-family: fantasy;
+}
+
+.select-area {
+  margin-bottom: 30px;
+}
+
+.options {
+  margin-bottom: 20px;
+}
+
+.selectBoxes {
+  text-align: center;
+  position: relative;
+  
+}
+
+.footer-section {
+  background-color: #343a40;
 }

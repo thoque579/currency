@@ -4,7 +4,9 @@ import CurrencyConverter from './Components/CurrencyConvertor';
 import 'bootstrap/dist/css/bootstrap.css';
 import Navigation from './Components/Navbar';
 import Footer from './Components/Footer';
-import CurrencyChart from './Components/CurrencyChart'
+import CurrencyTable from './Components/CurrencyTable'
+import CurrencyChart from './Components/CurrencyChart';
+
 function App() {
 
 
@@ -12,6 +14,7 @@ function App() {
     <div className="App">
        <Navigation/>
       <CurrencyConverter />
+      <CurrencyTable />
       <CurrencyChart />
       <Footer />
     </div>
