@@ -63,20 +63,19 @@ class CurrencyTable extends React.Component {
         return(
             <div className = "container">
                     <table className = "table table-striped table-dark">
-                    <thead className = "thead-dark">
-                        <tr>
-                            <th scope = "col">Listings <small>1.00 {base}</small></th>
-                            <th scope = "col">Exchange Rates</th>
-                        </tr>
-                    </thead>
+                        <thead className = "thead-dark">
+                            <tr>
+                                <th scope = "col">Listings <small>1.00 {base}</small></th>
+                                <th scope = "col">Exchange Rates</th>
+                            </tr>
+                        </thead>
                     <tbody>
             <div className = "select-area">
-                <select disabled = {loading}value = {base} onChange = {this.changeBase} className = "custom-select-sm mt-3 ml-1">
+                <select disabled = {loading} value = {base} onChange = {this.changeBase} className = "custom-select-sm mt-3 ml-1">
                     {selectValues.map(item => {
                         return <option key = {item} value = {item}>{item}</option>
                     })}
                 </select>
-
             </div>
                 {test.map(item => {
                         return  (

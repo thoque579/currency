@@ -20,7 +20,6 @@ class CurrencyRow extends React.Component {
     }
 }
 
-
 class CurrencyConverter extends React.Component {
 
     constructor(props) {
@@ -67,7 +66,6 @@ class CurrencyConverter extends React.Component {
     }
     
     changeBaseValue = (event) => {
-        
         this.setState({
             baseAmount: event.target.value,
             input: true
@@ -78,12 +76,14 @@ class CurrencyConverter extends React.Component {
         const fromCurrency = event.target.value
         this.setState({ fromCurrency })
         this.getRates(fromCurrency, this.state.toCurrency)
+        this.setState({input: true})
     }
 
     changeQuoteSelection = (event) => {
         const toCurrency = event.target.value
          this.setState({ toCurrency })
          this.getRates(this.state.fromCurrency, toCurrency)
+         this.setState({input: true})
     } 
 
     changeQuoteValue = (event) => {

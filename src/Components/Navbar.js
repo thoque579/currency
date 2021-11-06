@@ -13,9 +13,9 @@ const Navigation = () => {
                     <Nav className="ml-auto">
                         <Nav.Link href="" className = "text-white nav-item">Currency Converter</Nav.Link>
                         <Nav.Link href="" className = "text-white nav-item">Currency Chart</Nav.Link>
-                        <Nav.Link href="" className = "text-white nav-item"><AiFillGithub/>GitHub</Nav.Link>
-                        <Nav.Link href="" className = "text-white nav-item"><AiFillLinkedin/>Linkedln</Nav.Link>
-                        <Nav.Link href="" className = "text-white nav-item"><RiCodepenLine/>Portfolio</Nav.Link>
+                        <Nav.Link href="https://github.com/thoque579ru" className = "text-white nav-item"><AiFillGithub/>GitHub</Nav.Link>
+                        <Nav.Link href="https://www.linkedin.com/in/tushar-hoque-434940191/" className = "text-white nav-item"><AiFillLinkedin/>Linkedln</Nav.Link>
+                        <Nav.Link href="https://goofy-sammet-8acd27.netlify.app/" className = "text-white nav-item"><RiCodepenLine/>Portfolio</Nav.Link>
                         </Nav>
                     <Nav>
                 </Nav>
